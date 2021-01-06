@@ -24,12 +24,6 @@ jobs:
           path: Library
           key: Library
 
-      # # Test
-      # - name: Run tests
-      #   uses: webbertakken/unity-test-runner@v1.3
-      #   with:
-      #     unityVersion: 2019.2.11f1
-
       # Build
       - name: Build StandaloneWindows
         uses: webbertakken/unity-builder@v0.10
@@ -40,16 +34,31 @@ jobs:
           targetPlatform: StandaloneWindows
 
       # Build
-      - name: Build WebGL
-        uses: webbertakken/unity-builder@v0.10
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        with:
-          unityVersion: 2020.1.5f1
-          targetPlatform: WebGL
+      # - name: Build WebGL
+      #   uses: webbertakken/unity-builder@v0.10
+      #   env:
+      #     UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      #   with:
+      #     unityVersion: 2020.1.5f1
+      #     targetPlatform: WebGL
 
       # Output
       - uses: actions/upload-artifact@v1
         with:
           name: Build
           path: build
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
