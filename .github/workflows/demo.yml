@@ -24,48 +24,44 @@ jobs:
           path: Library
           key: Library
 
-      # Build
-      # - name: Build StandaloneWindows
-      #   uses: webbertakken/unity-builder@v0.10
-      #   env:
-      #     UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      #   with:
-      #     unityVersion: 2020.1.5f1
-      #     targetPlatform: StandaloneWindows
+      Build
+      - name: Build StandaloneWindows
+        uses: webbertakken/unity-builder@v0.10
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          unityVersion: 2020.1.5f1
+          targetPlatform: StandaloneWindows
 
-      # - name: Build project 
-      #   run: |
-      #     zip -r Build build/*
+      - name: Build project 
+        run: |
+          zip -r Build build/*
 
       - name: Set env
         run: echo "RELEASE_NAME=$(echo $(date +%Y_%m_%d)-${{github.run_number}})" >> $GITHUB_ENV
-        # run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $
 
-      - name: Test
-        run: echo $RELEASE_NAME
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: $RELEASE_NAME
+          release_name: $RELEASE_NAME
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
 
-      # - name: Create Release
-      #   id: create_release
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      #   with:
-      #     tag_name: v0.0.5
-      #     release_name: Release v0.0.5
-      #     body: |
-      #       Changes in this Release
-      #       - First Change
-      #       - Second Change
-      #     draft: false
-      #     prerelease: false
-
-      # - name: Upload Release Asset
-      #   id: upload-release-asset 
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-      #     asset_path: ./Build.zip
-      #     asset_name: Build.zip
-      #     asset_content_type: application/zip
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./Build.zip
+          asset_name: Build.zip
+          asset_content_type: application/zip
