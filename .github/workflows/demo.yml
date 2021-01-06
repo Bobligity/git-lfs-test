@@ -38,7 +38,7 @@ jobs:
       #     zip -r Build build/*
 
       - name: Set env
-        run: echo "RELEASE_NAME=echo $(date +%Y_%m_%d)-{{github.run_number}}" >> $RELEASE_NAME
+        run: echo "RELEASE_NAME=$(echo $(date +%Y_%m_%d)-{{github.run_number}})" >> $RELEASE_NAME
         # run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
 
       - name: Test
