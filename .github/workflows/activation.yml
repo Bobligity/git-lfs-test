@@ -1,5 +1,9 @@
 name: Acquire activation file
-on: []
+
+on:
+  pull_request: {}
+  push: { branches: [notabranch] }
+
 jobs:
   activation:
     name: Request manual activation file 🔑
