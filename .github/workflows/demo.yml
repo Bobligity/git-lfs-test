@@ -36,18 +36,13 @@ jobs:
       # - name: Build project 
       #   run: |
       #     zip -r Build build/*
-      - name: Set the value
-        id: step_one
-        run: |
-            echo 'values go here' >> $JUSTSOMEVAR
 
+      - name: Set env
+        run: echo "RELEASE_NAME=$(echo $(date +%Y_%m_%d)-{{github.run_number}})" >> $GITHUB_ENV
+        # run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $
 
-      # - name: Set env
-      #   run: echo $(date +%Y_%m_%d) >> $RELEASE_NAME
-      #   # run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
-
-      # - name: Test
-      #   run: echo $RELEASE_NAME
+      - name: Test
+        run: echo $RELEASE_NAME
 
       # - name: Create Release
       #   id: create_release
