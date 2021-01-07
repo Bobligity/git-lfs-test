@@ -24,7 +24,7 @@ jobs:
           path: Library
           key: Library
 
-      Build
+      # Build
       - name: Build StandaloneWindows
         uses: webbertakken/unity-builder@v0.10
         env:
