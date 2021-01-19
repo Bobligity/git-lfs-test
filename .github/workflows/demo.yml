@@ -1,8 +1,8 @@
-name: Actions
+name: Build and release project
 
 on:
   pull_request: {}
-  push: { branches: [main] }
+  push: { branches: [notabranch] }
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
